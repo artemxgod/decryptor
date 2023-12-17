@@ -10,7 +10,7 @@ type Crypt struct {
 	EncryptionKey *fernet.Key
 }
 
-func NewShield(key string) *Crypt {
+func NewCrypt(key string) *Crypt {
 	k := fernet.MustDecodeKeys(key)
 	return &Crypt{
 		EncryptionKey: k[0],
