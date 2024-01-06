@@ -13,7 +13,7 @@ type Config struct {
 func LoadConfig() (*viper.Viper, error) {
 	v := viper.New()
 
-	v.AddConfigPath("config")
+	v.AddConfigPath("D:\\github.com\\artemxgod\\bwg\\utils\\decryptor\\config")
 	v.SetConfigName("config")
 	v.SetConfigType("yml")
 	err := v.ReadInConfig()
