@@ -1,6 +1,6 @@
-# DECRYPTOR CLI
+# Decryptor CLI
 
-## FLAGS
+### Flags
 
 - `--en` encrypts the message
 - `--de` decrypts the message
