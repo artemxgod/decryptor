@@ -8,6 +8,8 @@
 
 > in main.go set your absolute config path
 
+> your key lenght should be 32 
+
 ### Features
 - Encrypted message will save automaticly to your clipboard
 
