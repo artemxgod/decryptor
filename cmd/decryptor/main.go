@@ -8,8 +8,9 @@ import (
 	"os"
 
 	"github.com/artemxgod/decryptor/config"
-	"github.com/artemxgod/decryptor/decryptor"
+	"github.com/artemxgod/decryptor/internal/decryptor"
 	"github.com/artemxgod/decryptor/pkg/fernet"
+	"github.com/atotto/clipboard"
 )
 
 type MessageDecryptor struct {
@@ -18,7 +19,12 @@ type MessageDecryptor struct {
 }
 
 func main() {
-	viper, err := config.LoadConfig()
+
+	cfgPath, err := configPath()
+	if err != nil {
+		log.Fatal(err)
+	}
+	viper, err := config.LoadConfig(cfgPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,11 +45,11 @@ func main() {
 
 	switch {
 	case *encrypt:
-		CaseEncrypt(in, md)
+		caseEncrypt(in, md)
 	case *decrypt:
-		CaseDecrypt(in, md)
+		caseDecrypt(in, md)
 	case *newKey:
-		CaseNewKey(in)
+		caseNewKey(in)
 	default:
 		fmt.Fprintln(os.Stdout, "invalid command")
 		os.Exit(1)
@@ -51,7 +57,7 @@ func main() {
 
 }
 
-func CaseEncrypt(in *bufio.Reader, md MessageDecryptor) {
+func caseEncrypt(in *bufio.Reader, md MessageDecryptor) {
 	fmt.Println("Write down the message to encrypt")
 	if _, err := fmt.Fscan(in, &md.message); err != nil {
 		log.Fatal(err)
@@ -62,9 +68,10 @@ func CaseEncrypt(in *bufio.Reader, md MessageDecryptor) {
 		log.Fatal(err)
 	}
 	fmt.Println("ENCRYPTED: ", cr)
+	clipboard.WriteAll(cr)
 }
 
-func CaseDecrypt(in *bufio.Reader, md MessageDecryptor) {
+func caseDecrypt(in *bufio.Reader, md MessageDecryptor) {
 	fmt.Println("Write down the message to decrypt")
 	if _, err := fmt.Fscan(in, &md.message); err != nil {
 		log.Fatal(err)
@@ -72,9 +79,10 @@ func CaseDecrypt(in *bufio.Reader, md MessageDecryptor) {
 
 	cr := md.decryptor.DecryptMessage(md.message)
 	fmt.Println("DECRYPTED:", cr)
+	// clipboard.WriteAll(cr)
 }
 
-func CaseNewKey(in *bufio.Reader) {
+func caseNewKey(in *bufio.Reader) {
 	var key string
 	var choose int
 	var md MessageDecryptor
@@ -85,8 +93,6 @@ func CaseNewKey(in *bufio.Reader) {
 	}
 	md.decryptor = fernet.NewCrypt(key)
 
-
-
 	fmt.Println("1. Encryption\n2. Decryption")
 	if _, err := fmt.Fscan(in, &choose); err != nil {
 		log.Fatal(err)
@@ -94,11 +100,23 @@ func CaseNewKey(in *bufio.Reader) {
 
 	switch choose {
 	case 1:
-		CaseEncrypt(in, md)
+		caseEncrypt(in, md)
 	case 2:
-		CaseDecrypt(in, md)
+		caseDecrypt(in, md)
 	default:
 		fmt.Fprintln(os.Stdout, "invalid command")
 		os.Exit(1)
 	}
+}
+
+func configPath() (string, error) {
+	// exePath, err := os.Executable()
+	// if err != nil {
+	// 	return "", err
+	// }
+	// exeDir := filepath.Dir(exePath)
+
+	// return filepath.Join(exeDir, "config"), nil
+
+	return "/Users/artemgod/github.com/artemxgod/personal/decryptor/config", nil
 }

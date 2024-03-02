@@ -3,6 +3,7 @@ module github.com/artemxgod/decryptor
 go 1.20
 
 require (
+	github.com/atotto/clipboard v0.1.4
 	github.com/fernet/fernet-go v0.0.0-20211208181803-9f70042a33ee
 	github.com/spf13/viper v1.18.1
 )

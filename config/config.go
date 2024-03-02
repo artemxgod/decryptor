@@ -10,10 +10,10 @@ type Config struct {
 	EncryptionKey string `json:"encryptionKey"`
 }
 
-func LoadConfig() (*viper.Viper, error) {
+func LoadConfig(configPath string) (*viper.Viper, error) {
 	v := viper.New()
-
-	v.AddConfigPath("D:\\github.com\\artemxgod\\bwg\\utils\\decryptor\\config")
+	// set this before running
+	v.AddConfigPath(configPath)
 	v.SetConfigName("config")
 	v.SetConfigType("yml")
 	err := v.ReadInConfig()
