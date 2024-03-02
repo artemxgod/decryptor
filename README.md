@@ -13,3 +13,8 @@
 
 ### Build app:
 - `go build -o decryptor ./cmd/decryptor`
+
+### to run executable from any folder
+#### for mac:
+- sudo cp "your_path_to_executable/decryptor" /usr/local/bin
+- chmod +x /usr/local/bin/decryptor
